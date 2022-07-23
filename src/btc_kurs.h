@@ -44,20 +44,16 @@ int httpCode = http.GET();
           //tft.drawBitmap(logo_tft_btc_block_x, logo_tft_btc_block_y, bitcoinLogo, 48, 48, TFT_RED);
           tft.setCursor(text_tft_btc_kurs_x, text_tft_btc_kurs_y);
           tft.setTextColor(TFT_RED,TFT_BLACK);
-          tft.setTextSize(1);
+          tft.setTextSize(2);
           tft.print("$"+BTC_USD.substring(0, 5));
           }
           BTC_old_kurs = BTC_USD;
-
-
   }
   
   else {
     Serial.println("Error on HTTP request");
   }
-
 	
 http.end(); //Free the resources
-
 
 }
