@@ -23,12 +23,14 @@ int httpCode = http.GET();
           Serial.println(mempool_height);
 
           // TFT Ausgabe
-          tft.fillRect(logo_tft_btc_block_x, logo_tft_btc_block_y, 48, 48, TFT_BLACK);
-          tft.drawBitmap(logo_tft_btc_block_x, logo_tft_btc_block_y, blocklogo, 48, 48, TFT_BLUE);
           tft.setCursor(text_tft_btc_block_x, text_tft_btc_block_y);
           tft.setTextColor(TFT_ORANGE,TFT_BLACK);
           tft.setTextSize(2);
-          tft.print(mempool_height);      
+          tft.print(mempool_height);    
+
+        tft.drawBitmap(30, 5, blocklogo, 42, 42, TFT_ORANGE);
+        tft.drawBitmap(74, 5, blocklogo, 42, 42, TFT_ORANGE);
+        tft.drawBitmap(118, 5, blocklogo, 42, 42, TFT_ORANGE);          
 
   } 
   

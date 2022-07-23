@@ -23,6 +23,7 @@ TFT_eSPI tft = TFT_eSPI();  // Invoke library, pins defined in User_Setup.h
 
 
 
+
 WebServer Server;
 
 AutoConnect       Portal(Server);
@@ -44,19 +45,17 @@ void display_del_nach_setup    ();
 
 /////////////////////////////////////////////////////////////////////////// Intervall der Steuerung
 unsigned long startSCHLEIFE_btckurs = 0;
-unsigned long intervSCHLEIFE_btckurs = 5000; 
+unsigned long intervSCHLEIFE_btckurs = 10000; 
 
 unsigned long startSCHLEIFE_zeit = 0;
 unsigned long intervSCHLEIFE_zeit = 2000; 
 
 unsigned long startSCHLEIFE_btcmempool = 0;
-unsigned long intervSCHLEIFE_btcmempool = 10000; 
+unsigned long intervSCHLEIFE_btcmempool = 40000; 
 
-// wechseln zwischen BTC Kurs und Blockzeit 
-unsigned long wechsler_millis_zaehler = 0;        // will store last time LED was updated
-const long wechsler_interval = 10000;           // interval at which to blink (milliseconds)
-
-
+// Intervall MEMblock animation
+const unsigned long mempool_animation_gesamtzyklus= 3*1000L; 
+unsigned long mempool_animation_start = 0;
 
 int wechsler = 0;
 
@@ -163,32 +162,48 @@ void loop() {
 display_del_nach_setup();
 
 
+    // Block text ausgebn
+  tft.setRotation(0);
+  tft.setTextColor(TFT_ORANGE,TFT_BLACK);
+  tft.setCursor(85, 3);
+  tft.setTextSize(1);
+  tft.print("BLOCK");
+  tft.setRotation(1);
 
+// Wuerfel lauflicht
+if ( millis() - mempool_animation_start >= mempool_animation_gesamtzyklus ) mempool_animation_start = millis();
+unsigned long phase = millis() - mempool_animation_start;  // phase ist immer im Bereich 0 .. gesamtzyklus
 
-
-/*
- // /////////////////////////////////////////////////////////////////////////// wechsler
-  unsigned long wechsler_start_millis = millis();
-  if (wechsler_start_millis - wechsler_millis_zaehler >= wechsler_interval) {
-
-    wechsler_millis_zaehler = wechsler_start_millis;
-
-
-    if (wechsler == 0) {
-      wechsler = 1;
-      Serial.println("BTC");
-      btc_kurs();
-    } else {
-      wechsler = 0;
-      Serial.println("Block");
-      btc_mempool();
-    }
+  if (phase < 1000 && phase > 800) {
+    // TFT Ausgabe Wuerfel
+    tft.drawBitmap(30, 5, blocklogo, 42, 42, TFT_GREEN);
+    tft.drawBitmap(74, 5, blocklogo, 42, 42, TFT_BLUE);
+    tft.drawBitmap(118, 5, blocklogo, 42, 42, TFT_BLUE);
   }
-  */
+
+  if (phase < 2000 && phase > 1800) {
+    tft.drawBitmap(30, 5, blocklogo, 42, 42, TFT_BLUE);
+    tft.drawBitmap(74, 5, blocklogo, 42, 42, TFT_GREEN);
+    tft.drawBitmap(118, 5, blocklogo, 42, 42, TFT_BLUE);
+  }
+
+  if (phase < 3000 && phase > 2800) {
+    tft.drawBitmap(30, 5, blocklogo, 42, 42, TFT_BLUE);
+    tft.drawBitmap(74, 5, blocklogo, 42, 42, TFT_BLUE);
+    tft.drawBitmap(118, 5, blocklogo, 42, 42, TFT_GREEN);
+  }
 
 
 
-/*
+      ///////////////////////////////////////////////////////////////////////// ZEIT abfragen
+      if (millis() - startSCHLEIFE_btcmempool > intervSCHLEIFE_btcmempool) {
+          startSCHLEIFE_btcmempool = millis();   // aktuelle Zeit abspeichern
+          // MEMpool abfragen
+          btc_mempool();
+          Serial.println("Mempool abfragen");
+        }
+
+
 ///////////////////////////////////////////////////////////////////////// BTC Kurs abfragen
 
   if (millis() - startSCHLEIFE_btckurs > intervSCHLEIFE_btckurs) {
@@ -199,7 +214,7 @@ display_del_nach_setup();
       Serial.println("BTC");
 
    } 
-*/
+
 
 
 ///////////////////////////////////////////////////////////////////////// ZEIT abfragen
@@ -210,13 +225,8 @@ display_del_nach_setup();
           Zeit_Uhrzeit();
  }
 
-/*
-      ///////////////////////////////////////////////////////////////////////// ZEIT abfragen
-      if (millis() - startSCHLEIFE_btcmempool > intervSCHLEIFE_btcmempool) {
-          startSCHLEIFE_btcmempool = millis();   // aktuelle Zeit abspeichern
-          // MEMpool abfragen
-          btc_mempool();
-        }
-*/
+
+
+
 
 }
