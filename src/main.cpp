@@ -118,15 +118,15 @@ void setup() {
   tft.println("Verbinden Sie sich bitte ");
   tft.setCursor(5, 22, 2);
   tft.println("mit Accesspoint esp32ap");
-    delay(500);
+    delay(20);
   tft.setCursor(5, 42, 2);
   tft.println("Passwort 12345678");  
-   delay(500);
+   delay(20);
   tft.setCursor(5, 62, 2);
   tft.println("Loggen Sie sich in Ihr");  
   tft.setCursor(5, 82, 2);
   tft.println("Wlan ein über das Portal.");   
-     delay(500); 
+     delay(20); 
 
 
   // Enable saved past credential by autoReconnect option,
@@ -162,6 +162,11 @@ void loop() {
 // Display löschen
 display_del_nach_setup();
 
+
+
+
+
+/*
  // /////////////////////////////////////////////////////////////////////////// wechsler
   unsigned long wechsler_start_millis = millis();
   if (wechsler_start_millis - wechsler_millis_zaehler >= wechsler_interval) {
@@ -179,6 +184,9 @@ display_del_nach_setup();
       btc_mempool();
     }
   }
+  */
+
+
 
 /*
 ///////////////////////////////////////////////////////////////////////// BTC Kurs abfragen
